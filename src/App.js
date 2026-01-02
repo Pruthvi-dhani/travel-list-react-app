@@ -19,6 +19,13 @@ export default function App() {
     );
   }
 
+  function handleClearItems() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete to all items?"
+    );
+    if (confirmed) setItems([]);
+  }
+
   return (
     <div className="App">
       <Logo />
@@ -27,6 +34,7 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearItems={handleClearItems}
       />
       <Stats items={items} />
     </div>
@@ -81,7 +89,7 @@ function Form({ onAddItems }) {
     </form>
   );
 }
-function PackingList({ items, onDeleteItem, onToggleItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem, onClearItems }) {
   const [sortBy, setSortBy] = useState("input");
   let sortedItems;
   if (sortBy === "input") sortedItems = items;
@@ -111,6 +119,7 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
           <option value="description">Sort by the description</option>
           <option value="packed">Sort by the packed status</option>
         </select>
+        <button onClick={onClearItems}>Clear list</button>
       </div>
     </div>
   );
@@ -140,7 +149,7 @@ function Stats({ items }) {
   return (
     <footer className="stats">
       <em>
-        {numItems === numAlreadyPacked
+        {numItems === numAlreadyPacked && numAlreadyPacked !== 0
           ? `You've got everything. You're ready to go ✈️`
           : `💼 You have ${numItems} items on your list, and you already packed 
         ${numAlreadyPacked} (
